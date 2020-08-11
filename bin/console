@@ -5,6 +5,8 @@ require 'bundler/setup'
 require 'riteway'
 
 require 'pry'
+require 'pry-byebug'
+require 'pry-doc'
 Pry.start
 
 require 'irb'
