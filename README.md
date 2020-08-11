@@ -1,3 +1,7 @@
+![Build Status](https://img.shields.io/travis/mycargus/riteway-ruby/master?logo=travis&style=for-the-badge)
+![License](https://img.shields.io/github/license/mycargus/riteway-ruby?style=for-the-badge)
+[![forthebadge](https://forthebadge.com/images/badges/uses-badges.svg)](https://forthebadge.com)
+
 # The RITEway Ruby gem
 
 Simple, readable, helpful unit tests in Ruby. Inspired by Eric Elliott's
