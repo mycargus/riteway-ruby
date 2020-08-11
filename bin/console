@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+require 'bundler/setup'
+require 'riteway'
+
+require 'pry'
+Pry.start
+
+require 'irb'
+IRB.start(__FILE__)
