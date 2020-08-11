@@ -8,7 +8,6 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Mikey Hargiss']
 
   spec.summary       = 'Simple, readable, helpful unit tests in Ruby'
-  spec.description   = "RITEway forces you to write **R**eadable, **I**solated, and **E**xplicit tests, because that's the only way you can use the API. It also makes it easier to be **T**horough by making test assertions so simple that you'll want to write more of them."
   spec.license       = 'MIT'
   spec.required_ruby_version = Gem::Requirement.new('>= 2.3.0')
 
