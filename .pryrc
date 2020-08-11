@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Add byebug aliases to pry sessions
 if defined?(PryByebug)
   Pry.commands.alias_command 'c', 'continue'
