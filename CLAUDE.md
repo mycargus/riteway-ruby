@@ -6,10 +6,12 @@ Ruby port of the [riteway JavaScript library](https://github.com/paralleldrive/r
 
 ```sh
 bundle install                              # install dependencies
-bundle exec rspec                           # run RSpec tests
-bundle exec rspec --format documentation   # verbose RSpec output
-bundle exec ruby -I test test/riteway_test.rb test/match_test.rb  # run Minitest tests
-bundle exec rake                            # run both suites
+bundle exec rake rspec                      # run RSpec tests
+bundle exec rake rspec SPEC_OPTS="--format documentation"  # verbose RSpec output
+bundle exec rake minitest                   # run Minitest tests
+bundle exec rake lint                       # run RuboCop
+bundle exec rake test                       # run all tests (RSpec + Minitest)
+bundle exec rake                            # lint + all tests
 ```
 
 ## Key Files
