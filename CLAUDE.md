@@ -22,7 +22,8 @@ bundle exec rake                            # run both suites
 - `spec/match_spec.rb` — RSpec tests for match (dogfooded)
 - `test/riteway_test.rb` — Minitest tests (dogfooded, Minitest::Spec style)
 - `test/match_test.rb` — Minitest tests for match (dogfooded)
-- `PLAN.md` — implementation plan and design decisions
+- `plans/PLAN.md` — implementation plan and phase history
+- `decisions/` — architectural decision records (ADRs), one per file
 
 ## Architecture
 
