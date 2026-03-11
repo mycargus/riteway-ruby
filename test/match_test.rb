@@ -64,6 +64,17 @@ describe "match()" do
     )
   end
 
+  it "given an empty string pattern, should raise ArgumentError" do
+    contains = Riteway.match("<h1>Hello</h1>")
+    error = Riteway.attempt(-> { contains.call("") })
+    Riteway.assert(
+      given: "an empty string pattern",
+      should: "raise ArgumentError",
+      actual: error.class,
+      expected: ArgumentError
+    )
+  end
+
   it "given a nil pattern, should raise TypeError" do
     contains = Riteway.match("<h1>Hello</h1>")
     error = Riteway.attempt(-> { contains.call(nil) })

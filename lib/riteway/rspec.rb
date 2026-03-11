@@ -25,6 +25,8 @@ module Riteway
       raise "Riteway.assert must be called inside an it/specify block, not at describe-level. " \
             "Move this assertion inside an `it` block."
     end
+    raise ArgumentError, "given: must be a non-empty String, got #{given.inspect}" unless given.is_a?(String) && !given.empty?
+    raise ArgumentError, "should: must be a non-empty String, got #{should.inspect}" unless should.is_a?(String) && !should.empty?
     matcher = RSpecBridge.eq(expected)
     return if matcher.matches?(actual)
     raise RSpec::Expectations::ExpectationNotMetError,

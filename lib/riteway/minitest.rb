@@ -26,8 +26,11 @@ module Riteway
             "Ensure `require \"riteway/minitest\"` is in your test_helper.rb " \
             "and that assert is only called from within a test context."
     end
+    raise ArgumentError, "given: must be a non-empty String, got #{given.inspect}" unless given.is_a?(String) && !given.empty?
+    raise ArgumentError, "should: must be a non-empty String, got #{should.inspect}" unless should.is_a?(String) && !should.empty?
     message = "Given #{given}: should #{should}"
     expected.nil? ? ctx.assert_nil(actual, message) : ctx.assert_equal(expected, actual, message)
+    nil
   end
 end
 

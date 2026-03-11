@@ -71,6 +71,42 @@ RSpec.describe "assert()" do
     )
   end
 
+  it "given an empty given string, should raise ArgumentError" do
+    error = Riteway.attempt(
+      -> { Riteway.assert(given: "", should: "y", actual: 1, expected: 1) }
+    )
+    Riteway.assert(
+      given: "an empty given string",
+      should: "raise ArgumentError",
+      actual: error.class,
+      expected: ArgumentError
+    )
+  end
+
+  it "given a nil given value, should raise ArgumentError" do
+    error = Riteway.attempt(
+      -> { Riteway.assert(given: nil, should: "y", actual: 1, expected: 1) }
+    )
+    Riteway.assert(
+      given: "a nil given value",
+      should: "raise ArgumentError",
+      actual: error.class,
+      expected: ArgumentError
+    )
+  end
+
+  it "given an empty should string, should raise ArgumentError" do
+    error = Riteway.attempt(
+      -> { Riteway.assert(given: "x", should: "", actual: 1, expected: 1) }
+    )
+    Riteway.assert(
+      given: "an empty should string",
+      should: "raise ArgumentError",
+      actual: error.class,
+      expected: ArgumentError
+    )
+  end
+
   it "given missing keyword args, should raise ArgumentError" do
     error = Riteway.attempt(
       -> { Riteway.assert(given: "x", should: "y") }

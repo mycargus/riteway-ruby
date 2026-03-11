@@ -62,6 +62,14 @@ Then require the adapter for your test framework. Use one or the other — not b
 require "riteway/rspec"
 ```
 
+Optional: filter Riteway internals from RSpec backtraces so failures point directly to your test code:
+
+```ruby
+RSpec.configure do |config|
+  config.backtrace_exclusion_patterns << /lib\/riteway/
+end
+```
+
 **Minitest** — require in `test/test_helper.rb`:
 
 ```ruby
