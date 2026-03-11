@@ -30,6 +30,10 @@ bundle exec rake                            # run both suites
 - **Adapter pattern** — `riteway/rspec` and `riteway/minitest` both implement `Riteway.assert`; require only one per project.
 - **Required keyword args** — `assert(given:, should:, actual:, expected:)` enforces all four at the language level. Missing keys raise Ruby's native `ArgumentError`.
 - **`attempt` not `try`** — `try` is reserved in Ruby.
+- **`attempt` guards outside rescue** — nil-callable and non-callable guards raise `ArgumentError` directly (not swallowed by `rescue`). Only errors from the callable itself are caught and returned.
+- **`match` input guards** — `match(text)` raises `TypeError` for non-String input; the returned lambda raises `TypeError` for non-String/non-Regexp patterns.
+- **RSpec namespace isolation** — `Riteway::RSpecBridge` (internal) holds `extend RSpec::Matchers`; keeps RSpec methods out of `Riteway`'s public namespace.
+- **Zero runtime dependencies** — core library has no gem dependencies; `rspec-expectations` is a dev dependency only.
 - **Dogfooded tests** — all specs/tests use `Riteway.assert` for assertions.
 - **Minitest nil handling** — Minitest 6 requires `assert_nil` instead of `assert_equal nil, ...`; the adapter handles this automatically.
 

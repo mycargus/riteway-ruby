@@ -7,3 +7,4 @@
 **Consequences:**
 - `Riteway.attempt(my_lambda, arg1)` and `Riteway.attempt { risky_code }` both work.
 - kwargs are forwarded correctly in Ruby 3+ (no implicit hash-to-kwargs conversion).
+- Raises `ArgumentError` if no callable and no block is provided, or if the argument doesn't respond to `#call`. These guards are outside the `rescue` scope — programmer mistakes propagate as real exceptions rather than being caught and returned. See ADR 014.

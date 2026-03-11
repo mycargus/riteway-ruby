@@ -75,7 +75,6 @@ Minitest ships with Ruby's standard library — no extra gem needed.
 
 ```ruby
 require "riteway/rspec"
-require "riteway"
 
 # A function to test
 def sum(*args)
@@ -126,7 +125,9 @@ end
 
 ## Output
 
-Riteway uses RSpec under the hood, so you get all of RSpec's output formats. The default format shows each test as a dot; use `--format documentation` for full prose output:
+Riteway uses your test framework's output. The failure message always includes the given/should context; the diff format varies slightly between RSpec (colorized diff) and Minitest (simple expected/got lines).
+
+For RSpec, use `--format documentation` for full prose output:
 
 ```shell
 bundle exec rspec --format documentation
@@ -175,12 +176,12 @@ Riteway.assert(
 ### `Riteway.attempt`
 
 ```ruby
-Riteway.attempt(callable, *args) => Error | Any
+Riteway.attempt(callable = nil, *args, **kwargs, &block) => Error | Any
 ```
 
 Execute a callable or block with the given arguments. Returns the error if one is raised, otherwise returns the result. Designed for testing error cases in your assertions. Supports positional args, keyword args, lambdas, procs, and blocks.
 
-`attempt` catches `StandardError` and its subclasses (Ruby's default `rescue` behavior). Exceptions outside this hierarchy — `SystemExit`, `Interrupt`, `SignalException` — propagate normally.
+`attempt` catches `StandardError` and its subclasses only. Exceptions outside this hierarchy — `SystemExit`, `Interrupt`, `SignalException` — propagate normally. Note that RSpec's `ExpectationNotMetError` inherits from `Exception` (not `StandardError`), so it propagates through `attempt` rather than being caught and returned.
 
 ```ruby
 # Block form (most concise)
@@ -209,7 +210,7 @@ Riteway.assert(
 Riteway.count_keys(hash = {}) => Integer
 ```
 
-Given a hash, return a count of its keys. Defaults to `{}` (returns `0`) when called with no arguments. Handy when you're adding new state to a hash keyed by ID and want to ensure the correct number of keys were added.
+Given a hash, return a count of its keys. Defaults to `{}` (returns `0`) when called with no arguments. A convenience wrapper for `hash.keys.length` that reads naturally inside a `Riteway.assert` call. Handy when you're adding new state to a hash keyed by ID and want to ensure the correct number of keys were added.
 
 ```ruby
 Riteway.assert(

@@ -3,7 +3,9 @@ module Riteway
   # Returns the matched text on success, or nil if no match — consistent with
   # Ruby's String#match which also returns nil on no match.
   def self.match(text)
+    raise TypeError, "match expects a String, got #{text.class}" unless text.is_a?(String)
     ->(pattern) {
+      raise TypeError, "pattern must be a String or Regexp, got #{pattern.class}" unless pattern.is_a?(String) || pattern.is_a?(Regexp)
       re = pattern.is_a?(String) ? Regexp.new(Regexp.escape(pattern)) : pattern
       matched = text.match(re)
       matched ? matched[0] : nil

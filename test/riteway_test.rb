@@ -80,6 +80,34 @@ describe "assert()" do
     )
   end
 
+  it "given a failing assertion, should include given/should context AND the diff" do
+    # Minitest::Assertion < Exception (not StandardError), so rescue directly
+    begin
+      Riteway.assert(given: "two values", should: "be equal", actual: 1, expected: 2)
+    rescue Minitest::Assertion => error
+      contains = Riteway.match(error.message)
+
+      Riteway.assert(
+        given: "a failing assert",
+        should: "include given/should in the message",
+        actual: contains.call("Given two values: should be equal"),
+        expected: "Given two values: should be equal"
+      )
+      Riteway.assert(
+        given: "a failing assert",
+        should: "include the expected value in the diff",
+        actual: contains.call("2"),
+        expected: "2"
+      )
+      Riteway.assert(
+        given: "a failing assert",
+        should: "include the actual value in the diff",
+        actual: contains.call("1"),
+        expected: "1"
+      )
+    end
+  end
+
   it "given assert called outside a test context, should raise RuntimeError" do
     original = Thread.current[:riteway_minitest_context]
     Thread.current[:riteway_minitest_context] = nil
@@ -147,6 +175,26 @@ describe "attempt()" do
     error = Riteway.attempt(-> { Riteway.attempt })
     Riteway.assert(
       given: "no callable and no block",
+      should: "raise ArgumentError",
+      actual: error.class,
+      expected: ArgumentError
+    )
+  end
+
+  it "given a non-callable argument, should raise ArgumentError" do
+    error = Riteway.attempt(-> { Riteway.attempt(42) })
+    Riteway.assert(
+      given: "a non-callable argument",
+      should: "raise ArgumentError",
+      actual: error.class,
+      expected: ArgumentError
+    )
+  end
+
+  it "given both a callable and a block, should raise ArgumentError" do
+    error = Riteway.attempt(-> { Riteway.attempt(-> { 1 }) { 2 } })
+    Riteway.assert(
+      given: "both a callable and a block",
       should: "raise ArgumentError",
       actual: error.class,
       expected: ArgumentError

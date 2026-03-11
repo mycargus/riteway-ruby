@@ -13,9 +13,9 @@ JavaScript library at `../riteway` (upstream: [paralleldrive/riteway](https://gi
 | Function | Signature | Description |
 |----------|-----------|-------------|
 | `Riteway.assert` | `(given:, should:, actual:, expected:)` | Required keyword args enforced by Ruby; raises `RSpec::Expectations::ExpectationNotMetError` (RSpec) or `Minitest::Assertion` (Minitest) with `"Given #{given}: should #{should}\n<diff>"` |
-| `Riteway.attempt` | `(callable = nil, *args, **kwargs, &block)` | Calls callable or block with args/kwargs; returns the error if raised (`StandardError` only), otherwise returns the result |
+| `Riteway.attempt` | `(callable = nil, *args, **kwargs, &block)` | Calls callable or block with args/kwargs; returns the error if raised (`StandardError` only), otherwise returns the result. Raises `ArgumentError` for missing or non-callable input (guards are outside `rescue` scope). |
 | `Riteway.count_keys` | `(hash = {})` | Returns `hash.keys.length`; raises `TypeError` for non-Hash input; defaults to `{}` (returns `0`) |
-| `Riteway.match` | `(text)` | Returns a lambda `(pattern) => String\|nil`; returns matched text or `nil` on no match — consistent with Ruby's `String#match` |
+| `Riteway.match` | `(text)` | Returns a lambda `(pattern) => String\|nil`; raises `TypeError` for non-String `text`; lambda raises `TypeError` for non-String/non-Regexp pattern; returns matched text or `nil` on no match |
 
 ## Phase 1: RSpec Adapter ✅ COMPLETE
 
@@ -75,7 +75,7 @@ Six additional issues identified through a second dogfooding review:
 5. **`count_keys(nil)` raises `TypeError`** — Clear message: `count_keys expects a Hash, got NilClass`
 6. **Minitest context error is actionable** — Message now says what to check and where
 
-## Phase 5: UX Hardening III
+## Phase 5: UX Hardening III ✅ COMPLETE
 
 Twelve issues surfaced from an engineer-perspective review, plus seven issues from a plan review. Grouped into 8 implementation steps, ordered by dependency (foundational changes first, docs last).
 

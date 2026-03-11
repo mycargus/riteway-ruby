@@ -29,19 +29,14 @@ Riteway.count_keys(hash = {})
 Riteway.match(text) # => ->(pattern) { ... }
 ```
 
-## Key Design Decisions
+## Design Decisions
 
-- Required keyword args on `assert` — enforced by Ruby, raises `ArgumentError`
-- `attempt` accepts callable OR block; catches `StandardError` only
-- `match` returns `nil` on no match (consistent with `String#match`)
-- RSpec adapter: raises `RSpec::Expectations::ExpectationNotMetError` (subclass of `Exception`, NOT `StandardError`)
-- Minitest adapter: uses thread-local `Thread.current[:riteway_minitest_context]` to access running test instance
-- Both adapters guard against use outside a test context
-- `ADAPTER` constant prevents loading two adapters simultaneously
+See `decisions/` — one ADR per file. Key entries: 001 (adapter pattern), 002 (keyword args), 004 (StandardError scope), 005 (callables + blocks), 006 (match nil), 007 (count_keys TypeError), 013 (match input guards), 014 (attempt callable guard), 015 (RSpec namespace isolation), 016 (optional rspec dependency).
 
 ## Known Non-Obvious Behaviors
 
-- `attempt` cannot catch `RSpec::Expectations::ExpectationNotMetError` — it inherits from `Exception`
+- `attempt` cannot catch `RSpec::Expectations::ExpectationNotMetError` or `Minitest::Assertion` — both inherit from `Exception`, not `StandardError`
+- `attempt` raises `ArgumentError` (propagates) for nil or non-callable input — these are programmer mistakes, not caught errors
 - `ADAPTER` constant conflict fires at `require` time, before any test runs
 - `match` lambda can be called with `.call()`, `.()`, or `[]` syntax
 - `count_keys` raises `TypeError` for non-Hash input including `nil`

@@ -53,4 +53,25 @@ RSpec.describe "match()" do
       expected: nil
     )
   end
+
+  it "given a non-String text argument, should raise TypeError" do
+    error = Riteway.attempt(-> { Riteway.match(42) })
+    Riteway.assert(
+      given: "a non-String text argument",
+      should: "raise TypeError",
+      actual: error.class,
+      expected: TypeError
+    )
+  end
+
+  it "given a nil pattern, should raise TypeError" do
+    contains = Riteway.match("<h1>Hello</h1>")
+    error = Riteway.attempt(-> { contains.call(nil) })
+    Riteway.assert(
+      given: "a nil pattern",
+      should: "raise TypeError",
+      actual: error.class,
+      expected: TypeError
+    )
+  end
 end

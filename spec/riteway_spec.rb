@@ -93,19 +93,42 @@ RSpec.describe "assert()" do
         expected: 2
       )
     rescue RSpec::Expectations::ExpectationNotMetError => error
+      contains = Riteway.match(error.message)
+
       Riteway.assert(
         given: "a failing assert",
         should: "include given/should in the message",
-        actual: error.message.include?("Given two unequal values: should show context and diff"),
-        expected: true
+        actual: contains.call("Given two unequal values: should show context and diff"),
+        expected: "Given two unequal values: should show context and diff"
       )
       Riteway.assert(
         given: "a failing assert",
-        should: "include the diff in the message",
-        actual: error.message.include?("2") && error.message.include?("1"),
-        expected: true
+        should: "include the expected value in the diff",
+        actual: contains.call(/expected:\s*2/i),
+        expected: "expected: 2"
+      )
+      Riteway.assert(
+        given: "a failing assert",
+        should: "include the actual value in the diff",
+        actual: contains.call(/got:\s*1/i),
+        expected: "got: 1"
       )
     end
+  end
+
+  it "given assert called outside an it block, should raise RuntimeError" do
+    allow(RSpec).to receive(:current_example).and_return(nil)
+    error = Riteway.attempt(-> {
+      Riteway.assert(given: "no context", should: "raise", actual: 1, expected: 1)
+    })
+    allow(RSpec).to receive(:current_example).and_call_original
+
+    Riteway.assert(
+      given: "assert called outside an it block",
+      should: "raise RuntimeError",
+      actual: error.class,
+      expected: RuntimeError
+    )
   end
 end
 
@@ -160,6 +183,26 @@ RSpec.describe "attempt()" do
     error = Riteway.attempt(-> { Riteway.attempt })
     Riteway.assert(
       given: "no callable and no block",
+      should: "raise ArgumentError",
+      actual: error.class,
+      expected: ArgumentError
+    )
+  end
+
+  it "given a non-callable argument, should raise ArgumentError" do
+    error = Riteway.attempt(-> { Riteway.attempt(42) })
+    Riteway.assert(
+      given: "a non-callable argument",
+      should: "raise ArgumentError",
+      actual: error.class,
+      expected: ArgumentError
+    )
+  end
+
+  it "given both a callable and a block, should raise ArgumentError" do
+    error = Riteway.attempt(-> { Riteway.attempt(-> { 1 }) { 2 } })
+    Riteway.assert(
+      given: "both a callable and a block",
       should: "raise ArgumentError",
       actual: error.class,
       expected: ArgumentError
