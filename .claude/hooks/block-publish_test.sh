@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
 # Tests for block-publish.sh hook
 # Run: bash .claude/hooks/block-publish_test.sh
 

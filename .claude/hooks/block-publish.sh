@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
 # PreToolUse hook: block automated publishing (ADR 012)
 # Reads JSON from stdin, pattern-matches the "command" field directly.
 # Exit 2 = block, Exit 0 = allow.
