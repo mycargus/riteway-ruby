@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 # A function to test — mirrors the JS test's `sum()` example
@@ -19,8 +21,8 @@ RSpec.describe "sum()" do
     Riteway.assert(
       given: "no arguments",
       should: "return 0",
-      actual: sum(),
-      expected: 0
+      actual: sum,
+      expected: 0,
     )
   end
 
@@ -29,7 +31,7 @@ RSpec.describe "sum()" do
       given: "zero",
       should: should,
       actual: sum(2, 0),
-      expected: 2
+      expected: 2,
     )
   end
 
@@ -38,7 +40,7 @@ RSpec.describe "sum()" do
       given: "negative numbers",
       should: should,
       actual: sum(1, -4),
-      expected: -3
+      expected: -3,
     )
   end
 
@@ -49,14 +51,14 @@ RSpec.describe "sum()" do
       given: "a non-numeric argument",
       should: "raise TypeError",
       actual: error.class,
-      expected: TypeError
+      expected: TypeError,
     )
 
     Riteway.assert(
       given: "a non-numeric argument",
       should: "include the bad value in the message",
       actual: error.message,
-      expected: 'Not a number: "NaN"'
+      expected: 'Not a number: "NaN"',
     )
   end
 end
@@ -67,89 +69,88 @@ RSpec.describe "assert()" do
       given: "a nil value",
       should: "not raise",
       actual: nil,
-      expected: nil
+      expected: nil,
     )
   end
 
   it "given an empty given string, should raise ArgumentError" do
     error = Riteway.attempt(
-      -> { Riteway.assert(given: "", should: "y", actual: 1, expected: 1) }
+      -> { Riteway.assert(given: "", should: "y", actual: 1, expected: 1) },
     )
     Riteway.assert(
       given: "an empty given string",
       should: "raise ArgumentError",
       actual: error.class,
-      expected: ArgumentError
+      expected: ArgumentError,
     )
   end
 
   it "given a nil given value, should raise ArgumentError" do
     error = Riteway.attempt(
-      -> { Riteway.assert(given: nil, should: "y", actual: 1, expected: 1) }
+      -> { Riteway.assert(given: nil, should: "y", actual: 1, expected: 1) },
     )
     Riteway.assert(
       given: "a nil given value",
       should: "raise ArgumentError",
       actual: error.class,
-      expected: ArgumentError
+      expected: ArgumentError,
     )
   end
 
   it "given an empty should string, should raise ArgumentError" do
     error = Riteway.attempt(
-      -> { Riteway.assert(given: "x", should: "", actual: 1, expected: 1) }
+      -> { Riteway.assert(given: "x", should: "", actual: 1, expected: 1) },
     )
     Riteway.assert(
       given: "an empty should string",
       should: "raise ArgumentError",
       actual: error.class,
-      expected: ArgumentError
+      expected: ArgumentError,
     )
   end
 
   it "given missing keyword args, should raise ArgumentError" do
     error = Riteway.attempt(
-      -> { Riteway.assert(given: "x", should: "y") }
+      -> { Riteway.assert(given: "x", should: "y") },
     )
     Riteway.assert(
       given: "missing keyword args",
       should: "raise ArgumentError",
       actual: error.class,
-      expected: ArgumentError
+      expected: ArgumentError,
     )
   end
 
   it "given a failing assertion, should include given/should context AND the diff" do
     # ExpectationNotMetError < Exception, not StandardError, so rescue directly
-    begin
-      Riteway.assert(
-        given: "two unequal values",
-        should: "show context and diff",
-        actual: 1,
-        expected: 2
-      )
-    rescue RSpec::Expectations::ExpectationNotMetError => error
-      contains = Riteway.match(error.message)
 
-      Riteway.assert(
-        given: "a failing assert",
-        should: "include given/should in the message",
-        actual: contains.call("Given two unequal values: should show context and diff"),
-        expected: "Given two unequal values: should show context and diff"
-      )
-      Riteway.assert(
-        given: "a failing assert",
-        should: "include the expected value in the diff",
-        actual: contains.call(/expected:\s*2/i),
-        expected: "expected: 2"
-      )
-      Riteway.assert(
-        given: "a failing assert",
-        should: "include the actual value in the diff",
-        actual: contains.call(/got:\s*1/i),
-        expected: "got: 1"
-      )
-    end
+    Riteway.assert(
+      given: "two unequal values",
+      should: "show context and diff",
+      actual: 1,
+      expected: 2,
+    )
+  rescue RSpec::Expectations::ExpectationNotMetError => error
+    contains = Riteway.match(error.message)
+
+    Riteway.assert(
+      given: "a failing assert",
+      should: "include given/should in the message",
+      actual: contains.call("Given two unequal values: should show context and diff"),
+      expected: "Given two unequal values: should show context and diff",
+    )
+    Riteway.assert(
+      given: "a failing assert",
+      should: "include the expected value in the diff",
+      actual: contains.call(/expected:\s*2/i),
+      expected: "expected: 2",
+    )
+    Riteway.assert(
+      given: "a failing assert",
+      should: "include the actual value in the diff",
+      actual: contains.call(/got:\s*1/i),
+      expected: "got: 1",
+    )
   end
 
   it "given assert called outside an it block, should raise RuntimeError" do
@@ -163,7 +164,7 @@ RSpec.describe "assert()" do
       given: "assert called outside an it block",
       should: "raise RuntimeError",
       actual: error.class,
-      expected: RuntimeError
+      expected: RuntimeError,
     )
   end
 end
@@ -175,7 +176,7 @@ RSpec.describe "attempt()" do
       given: "a callable that raises",
       should: "return the error",
       actual: Riteway.attempt(-> { raise error }),
-      expected: error
+      expected: error,
     )
   end
 
@@ -184,7 +185,7 @@ RSpec.describe "attempt()" do
       given: "a callable that succeeds",
       should: "return the result",
       actual: Riteway.attempt(->(x) { x * 2 }, 21),
-      expected: 42
+      expected: 42,
     )
   end
 
@@ -193,7 +194,7 @@ RSpec.describe "attempt()" do
       given: "a block that succeeds",
       should: "return the result",
       actual: Riteway.attempt { 6 * 7 },
-      expected: 42
+      expected: 42,
     )
   end
 
@@ -202,7 +203,7 @@ RSpec.describe "attempt()" do
       given: "a block that raises",
       should: "return the error",
       actual: Riteway.attempt { raise ArgumentError, "bad input" }.class,
-      expected: ArgumentError
+      expected: ArgumentError,
     )
   end
 
@@ -211,7 +212,7 @@ RSpec.describe "attempt()" do
       given: "a method with keyword arguments",
       should: "return the result",
       actual: Riteway.attempt(method(:greet), name: "Alice"),
-      expected: "Hello, Alice!"
+      expected: "Hello, Alice!",
     )
   end
 
@@ -221,7 +222,7 @@ RSpec.describe "attempt()" do
       given: "no callable and no block",
       should: "raise ArgumentError",
       actual: error.class,
-      expected: ArgumentError
+      expected: ArgumentError,
     )
   end
 
@@ -231,7 +232,7 @@ RSpec.describe "attempt()" do
       given: "a non-callable argument",
       should: "raise ArgumentError",
       actual: error.class,
-      expected: ArgumentError
+      expected: ArgumentError,
     )
   end
 
@@ -241,7 +242,7 @@ RSpec.describe "attempt()" do
       given: "both a callable and a block",
       should: "raise ArgumentError",
       actual: error.class,
-      expected: ArgumentError
+      expected: ArgumentError,
     )
   end
 end
@@ -252,7 +253,7 @@ RSpec.describe "count_keys()" do
       given: "a hash with 3 keys",
       should: "return 3",
       actual: Riteway.count_keys({ a: "a", b: "b", c: "c" }),
-      expected: 3
+      expected: 3,
     )
   end
 
@@ -261,7 +262,7 @@ RSpec.describe "count_keys()" do
       given: "no arguments",
       should: "return 0",
       actual: Riteway.count_keys,
-      expected: 0
+      expected: 0,
     )
   end
 
@@ -271,7 +272,7 @@ RSpec.describe "count_keys()" do
       given: "nil",
       should: "raise TypeError",
       actual: error.class,
-      expected: TypeError
+      expected: TypeError,
     )
   end
 end

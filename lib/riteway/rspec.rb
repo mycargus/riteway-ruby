@@ -1,17 +1,22 @@
+# frozen_string_literal: true
+
 begin
   require "rspec/expectations"
   require "rspec/matchers"
 rescue LoadError
   raise LoadError,
-    "riteway/rspec requires the 'rspec' gem. Add `gem \"rspec\"` to your Gemfile, " \
-    "or use `require \"riteway/minitest\"` for Minitest."
+        "riteway/rspec requires the 'rspec' gem. Add `gem \"rspec\"` to your Gemfile, " \
+        "or use `require \"riteway/minitest\"` for Minitest."
 end
 require "riteway"
 
 module Riteway
   if defined?(ADAPTER)
-    raise LoadError, "riteway: adapter conflict — #{ADAPTER} already loaded. Only require one adapter (riteway/rspec or riteway/minitest)."
+    raise LoadError,
+          "riteway: adapter conflict — #{ADAPTER} already loaded. " \
+          "Only require one adapter (riteway/rspec or riteway/minitest)."
   end
+
   ADAPTER = :rspec
 
   # Internal — not part of the public API. Isolates RSpec matcher methods
@@ -25,11 +30,19 @@ module Riteway
       raise "Riteway.assert must be called inside an it/specify block, not at describe-level. " \
             "Move this assertion inside an `it` block."
     end
-    raise ArgumentError, "given: must be a non-empty String, got #{given.inspect}" unless given.is_a?(String) && !given.empty?
-    raise ArgumentError, "should: must be a non-empty String, got #{should.inspect}" unless should.is_a?(String) && !should.empty?
+    unless given.is_a?(String) && !given.empty?
+      raise ArgumentError,
+            "given: must be a non-empty String, got #{given.inspect}"
+    end
+    unless should.is_a?(String) && !should.empty?
+      raise ArgumentError,
+            "should: must be a non-empty String, got #{should.inspect}"
+    end
+
     matcher = RSpecBridge.eq(expected)
     return if matcher.matches?(actual)
+
     raise RSpec::Expectations::ExpectationNotMetError,
-      "Given #{given}: should #{should}\n#{matcher.failure_message}"
+          "Given #{given}: should #{should}\n#{matcher.failure_message}"
   end
 end

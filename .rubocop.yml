@@ -1,0 +1,58 @@
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.0
+  SuggestExtensions: false
+  Exclude:
+    - "*.gemspec"
+    - "Gemfile"
+    - "Rakefile"
+
+# Project uses double-quoted strings throughout
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/StringLiteralsInInterpolation:
+  EnforcedStyle: double_quotes
+
+# Test descriptions and error messages are naturally long
+Layout/LineLength:
+  Max: 120
+
+# Riteway.assert calls use multi-line keyword args — trailing commas are intentional
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: consistent_comma
+
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: consistent_comma
+
+# Stabby lambda (->) is idiomatic Ruby; no need to prefer the lambda method
+Style/Lambda:
+  Enabled: false
+
+# rescue => e is more concise and universally understood; StandardError is implied
+Style/RescueStandardError:
+  Enabled: false
+
+# Modules are documented via README and ADRs, not inline
+Style/Documentation:
+  Enabled: false
+
+# Test files use `error` as the rescue variable name, which is more descriptive than `e`
+Naming/RescuedExceptionsVariableName:
+  PreferredName: error
+
+# Guard-heavy methods with validation chains exceed default thresholds — the complexity is warranted
+Metrics/CyclomaticComplexity:
+  Max: 10
+
+Metrics/AbcSize:
+  Max: 22
+
+Metrics/MethodLength:
+  Max: 18
+
+# Test describe/it blocks are naturally long — don't penalize thorough tests
+Metrics/BlockLength:
+  Exclude:
+    - "spec/**/*"
+    - "test/**/*"

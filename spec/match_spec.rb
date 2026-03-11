@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 RSpec.describe "match()" do
@@ -13,7 +15,7 @@ RSpec.describe "match()" do
       given: given,
       should: should,
       actual: contains.call(pattern),
-      expected: pattern
+      expected: pattern,
     )
   end
 
@@ -25,7 +27,7 @@ RSpec.describe "match()" do
       given: "some text with digits",
       should: should,
       actual: contains.call(/\d+\s\w+/i),
-      expected: "4 cats"
+      expected: "4 cats",
     )
   end
 
@@ -38,7 +40,7 @@ RSpec.describe "match()" do
       given: "some text that includes regex meta characters",
       should: should,
       actual: contains.call(pattern),
-      expected: pattern
+      expected: pattern,
     )
   end
 
@@ -50,7 +52,7 @@ RSpec.describe "match()" do
       given: "a pattern that does not match",
       should: "return nil",
       actual: contains.call("not found"),
-      expected: nil
+      expected: nil,
     )
   end
 
@@ -60,7 +62,7 @@ RSpec.describe "match()" do
       given: "a non-String text argument",
       should: "raise TypeError",
       actual: error.class,
-      expected: TypeError
+      expected: TypeError,
     )
   end
 
@@ -71,7 +73,7 @@ RSpec.describe "match()" do
       given: "an empty string pattern",
       should: "raise ArgumentError",
       actual: error.class,
-      expected: ArgumentError
+      expected: ArgumentError,
     )
   end
 
@@ -82,7 +84,7 @@ RSpec.describe "match()" do
       given: "a nil pattern",
       should: "raise TypeError",
       actual: error.class,
-      expected: TypeError
+      expected: TypeError,
     )
   end
 end

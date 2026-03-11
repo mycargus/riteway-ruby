@@ -1,5 +1,6 @@
 require "rspec/core/rake_task"
 require "rake/testtask"
+require "rubocop/rake_task"
 
 RSpec::Core::RakeTask.new(:spec)
 
@@ -9,7 +10,9 @@ Rake::TestTask.new(:test) do |t|
   t.warning = false
 end
 
-task default: [:spec, :test]
+RuboCop::RakeTask.new(:rubocop)
+
+task default: [:rubocop, :spec, :test]
 
 # Publishing must be done manually by a human — never automated.
 # Override bundler's built-in release task to prevent accidental/automated pushes.
