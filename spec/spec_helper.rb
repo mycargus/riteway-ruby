@@ -1,0 +1,1 @@
+require "riteway/rspec"
