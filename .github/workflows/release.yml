@@ -1,0 +1,57 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  release:
+    name: Publish to RubyGems
+    runs-on: ubuntu-latest
+
+    # Require explicit permission to publish a GitHub release artifact
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.4"
+          bundler-cache: true
+
+      - name: Verify tag matches version
+        run: ruby scripts/verify_release_tag.rb "${GITHUB_REF_NAME}"
+
+      - name: Run lint
+        run: bundle exec rake lint
+
+      - name: Run tests
+        run: bundle exec rake test
+
+      - name: Build gem
+        run: bundle exec rake build
+
+      - name: Check RubyGems API key is configured
+        env:
+          GEM_HOST_API_KEY: ${{ secrets.GEM_HOST_API_KEY }}
+        run: |
+          if [ -z "${GEM_HOST_API_KEY}" ]; then
+            echo "GEM_HOST_API_KEY secret is not set. See RELEASING.md."
+            exit 1
+          fi
+
+      - name: Publish to RubyGems
+        env:
+          GEM_HOST_API_KEY: ${{ secrets.GEM_HOST_API_KEY }}
+        run: gem push pkg/*.gem
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" pkg/*.gem \
+            --title "riteway ${GITHUB_REF_NAME}" \
+            --notes "See [CHANGELOG](https://github.com/mycargus/riteway-ruby/blob/main/CHANGELOG.md) for details."

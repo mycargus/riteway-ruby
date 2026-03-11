@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative "riteway/version"
 require_relative "riteway/match"
 
 module Riteway

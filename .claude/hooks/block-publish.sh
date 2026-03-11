@@ -7,7 +7,10 @@
 input=$(cat)
 
 case "$input" in
-  *'"command":"rake release'*|*'"command":"bundle exec rake release'*|*'"command":"gem push'*)
+  *'"command":"rake release'*|\
+  *'"command":"bundle exec rake release'*|\
+  *'"command":"gem push'*|\
+  *'"command":"git push origin v'*)
     echo "HOOK_BLOCKED: Publishing must be done manually. See ADR 012." >&2
     exit 2
     ;;

@@ -28,6 +28,12 @@ assert "blocks 'rake release'" "2" "$?"
 echo '{"tool_input":{"command":"gem push riteway-0.1.0.gem"}}' | bash "$HOOK" 2>/dev/null
 assert "blocks 'gem push'" "2" "$?"
 
+echo '{"tool_input":{"command":"git push origin v0.1.0"}}' | bash "$HOOK" 2>/dev/null
+assert "blocks 'git push origin v<tag>'" "2" "$?"
+
+echo '{"tool_input":{"command":"git push origin v1.2.3"}}' | bash "$HOOK" 2>/dev/null
+assert "blocks 'git push origin v<semver>'" "2" "$?"
+
 # Allow cases
 echo '{"tool_input":{"command":"bundle exec rake test"}}' | bash "$HOOK" 2>/dev/null
 assert "allows 'bundle exec rake test'" "0" "$?"
@@ -40,6 +46,9 @@ assert "allows 'git status'" "0" "$?"
 
 echo '{"tool_input":{"command":"bundle exec rake rspec"}}' | bash "$HOOK" 2>/dev/null
 assert "allows 'bundle exec rake rspec'" "0" "$?"
+
+echo '{"tool_input":{"command":"git push origin main"}}' | bash "$HOOK" 2>/dev/null
+assert "allows 'git push origin main'" "0" "$?"
 
 echo ""
 echo "$pass passed, $fail failed"

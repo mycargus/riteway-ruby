@@ -12,11 +12,14 @@ bundle exec rake minitest                   # run Minitest tests
 bundle exec rake lint                       # run RuboCop
 bundle exec rake test                       # run all tests (RSpec + Minitest)
 bundle exec rake                            # lint + all tests
+bundle exec rake build                      # build gem to pkg/
+bundle exec rake release                    # preflight checks + tag push (human only; triggers CI release)
 ```
 
 ## Key Files
 
-- `lib/riteway.rb` — `attempt`, `count_keys`; requires `riteway/match`
+- `lib/riteway.rb` — `attempt`, `count_keys`; requires `riteway/version` and `riteway/match`
+- `lib/riteway/version.rb` — `Riteway::VERSION` constant (single source of truth)
 - `lib/riteway/match.rb` — `match()` curried text search
 - `lib/riteway/rspec.rb` — RSpec adapter; `assert` wired to `expect().to eq()`
 - `lib/riteway/minitest.rb` — Minitest adapter; `assert` wired to `assert_equal`/`assert_nil`
@@ -26,6 +29,7 @@ bundle exec rake                            # lint + all tests
 - `test/match_test.rb` — Minitest tests for match (dogfooded)
 - `plans/PLAN.md` — implementation plan and phase history
 - `decisions/` — architectural decision records (ADRs), one per file
+- `RELEASING.md` — full release process (local and GitHub Actions)
 
 ## Architecture
 
@@ -43,7 +47,7 @@ bundle exec rake                            # lint + all tests
 
 ## Constraints
 
-- **Never publish automatically.** `rake release` is blocked. Publishing is manual: `gem build && gem push`.
+- **Never publish automatically.** `rake release`, `gem push`, and `git push origin v*` are all blocked by the Claude Code hook. Publishing requires a human running `rake release` in their own terminal. See RELEASING.md.
 - Tests must remain dogfooded — use `Riteway.assert` for all assertions in spec files.
 
 ## What Is NOT Ported from JS

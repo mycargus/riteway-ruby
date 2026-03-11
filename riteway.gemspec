@@ -1,6 +1,8 @@
+require_relative "lib/riteway/version"
+
 Gem::Specification.new do |spec|
   spec.name        = "riteway"
-  spec.version     = "0.1.0"
+  spec.version     = Riteway::VERSION
   spec.summary     = "Unit tests that always supply a good bug report when they fail."
   spec.description = "Ruby port of the riteway JavaScript testing library."
   spec.authors     = ["Michael Hargiss"]

@@ -266,12 +266,7 @@ You can also use `contains.("pattern")` or `contains["pattern"]` as shorthand fo
 
 ## Publishing
 
-Publishing is manual only — run these commands yourself:
-
-```sh
-gem build riteway.gemspec
-gem push riteway-*.gem
-```
+See [RELEASING.md](RELEASING.md) for the full release process.
 
 `rake release` is intentionally disabled to prevent automated publishing.
 
