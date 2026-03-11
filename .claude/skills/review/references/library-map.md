@@ -37,6 +37,9 @@ See `decisions/` — one ADR per file. Key entries: 001 (adapter pattern), 002 (
 
 - `attempt` cannot catch `RSpec::Expectations::ExpectationNotMetError` or `Minitest::Assertion` — both inherit from `Exception`, not `StandardError`
 - `attempt` raises `ArgumentError` (propagates) for nil or non-callable input — these are programmer mistakes, not caught errors
+- `assert` validates `given:` and `should:` are non-empty Strings — raises `ArgumentError` for nil, empty, or non-String values
+- `assert` returns `nil` on success in both adapters (normalized for symmetry)
+- `match` lambda raises `ArgumentError` for empty-string patterns (prevents false-positive matches)
 - `ADAPTER` constant conflict fires at `require` time, before any test runs
 - `match` lambda can be called with `.call()`, `.()`, or `[]` syntax
 - `count_keys` raises `TypeError` for non-Hash input including `nil`
