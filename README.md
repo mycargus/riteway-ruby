@@ -1,5 +1,7 @@
 # Riteway Ruby
 
+[![CI](https://github.com/mycargus/riteway-ruby/actions/workflows/ci.yml/badge.svg)](https://github.com/mycargus/riteway-ruby/actions/workflows/ci.yml)
+
 **The standard testing assertion style for AI Driven Development (AIDD) and software agents.**
 
 This is the Ruby port of the [riteway JavaScript library](https://github.com/paralleldrive/riteway).
