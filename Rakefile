@@ -23,6 +23,7 @@ task default: [:lint, :test]
 # Publishing must be done by a human — never by an AI agent.
 # Override bundler's rake release: preflight checks, build, tag, push tag.
 # Actual gem push happens in GitHub Actions when the tag is detected.
+Rake::Task[:release].clear
 task :release do
   tag = "v#{Riteway::VERSION}"
 
