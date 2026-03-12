@@ -10,18 +10,32 @@ Actions detects the tag and handles publishing to RubyGems.
 
 - Push access to the `mycargus/riteway-ruby` GitHub repository
 - A RubyGems account with ownership of the `riteway` gem
-- `GEM_HOST_API_KEY` secret configured in the repository (one-time setup below)
+- Trusted publisher configured on RubyGems.org (one-time setup below)
 
-### One-time setup: RubyGems API key
+### One-time setup: Trusted publishing
 
-Create a **scoped** API key (push-only, limited to the `riteway` gem) at
-<https://rubygems.org/profile/edit> → "API keys". A scoped key limits blast
-radius if the secret is ever compromised.
+CI publishes via [OIDC trusted publishing](https://guides.rubygems.org/trusted-publishing/) —
+no long-lived API key secrets are needed. GitHub Actions exchanges a short-lived
+identity token with RubyGems.org for a scoped, temporary API token.
 
-Add it as a GitHub repository secret:
+Configure the trusted publisher on RubyGems.org:
 
-1. **Settings → Secrets and variables → Actions → New repository secret**
-2. Name: `GEM_HOST_API_KEY`, value: your scoped key
+1. Go to <https://rubygems.org> → your gem → **Trusted publishers**
+2. Click **Create** and fill in:
+   - **Repository owner:** `mycargus`
+   - **Repository name:** `riteway-ruby`
+   - **Workflow filename:** `release.yml`
+   - **Environment:** `release`
+3. Save
+
+Configure the `release` environment on GitHub:
+
+1. **Settings → Environments → New environment** → name it `release`
+2. Under **Deployment branches and tags**, change to **Selected branches and tags**
+3. **Add deployment branch or tag rule** → enter `v*` as a **tag** pattern
+4. Save
+
+This restricts OIDC credentials to tag-triggered runs only.
 
 ## Steps
 
