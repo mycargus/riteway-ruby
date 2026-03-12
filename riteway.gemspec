@@ -11,8 +11,12 @@ Gem::Specification.new do |spec|
 
   # Publishing must be done manually by a human. No automated publishing.
   spec.metadata["allowed_push_host"] = "https://rubygems.org"
+  spec.metadata["homepage_uri"]      = spec.homepage
+  spec.metadata["source_code_uri"]   = spec.homepage
+  spec.metadata["changelog_uri"]     = "#{spec.homepage}/blob/main/CHANGELOG.md"
+  spec.metadata["bug_tracker_uri"]   = "#{spec.homepage}/issues"
 
-  spec.files       = Dir["lib/**/*.rb"]
+  spec.files       = Dir["lib/**/*.rb"] + ["LICENSE", "README.md", "CHANGELOG.md"]
   spec.require_paths = ["lib"]
 
   spec.required_ruby_version = ">= 3.0"
